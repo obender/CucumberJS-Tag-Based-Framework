@@ -1,0 +1,257 @@
+{
+	"variables": [],
+	"info": {
+		"name": "search.grid",
+		"_postman_id": "141b9ea7-3a62-9cd8-4c65-c3eaa79de152",
+		"description": "The last request \"API CHange State\" is there just to make sure enough time has passed and the API was added to the list-api grid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth - ClearAll - Reset APIs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Reset API status code \" + responseCode.code + \" is 200\"] = responseCode.code === 200;"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/reset",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "doubleCheck",
+						"value": "tester@infa",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "sample2_load 16 services",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setGlobalVariable(\"servicesTimesFour\", \"4\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/services/load/{{servicesTimesFour}}",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "make sure you change the parameter {{servicesTimesFour}} in the pre-request\n\nnumber of services that will be created = {{servicesTimesFour}}*4\n\n"
+			},
+			"response": []
+		},
+		{
+			"name": "SetRate Limit Policy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Set rate limit status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"eval(postman.getGlobalVariable(\"getJWT_governor\"));\r",
+							"getJWT_governor('orgid1',1);\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/policy/ratelimit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeFrame\" : \"5000\",\n    \"quota\" : \"2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete IP filtering rules",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"eval(postman.getGlobalVariable(\"getJWT_governor\"));",
+							"getJWT_governor('orgid1',1);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/policy/ipfilter",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "API Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"API create status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setGlobalVariable(\"createdID\", jsonData.id);",
+							"postman.setGlobalVariable(\"createdURL\", jsonData.exposedApi.url);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/manapi",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"providerApi\": {\r\n    \"name\": \"test_grid_api\",\r\n    \"url\" : \"http://localhost:8080/apimgmt/v0.4/swagger\"\r\n  },\r\n  \"policies\": {\r\n      \"authentication\": { \r\n          \"authType\" : \"BasicIcsAuth\"\r\n      }\r\n  }\r\n}\r\n"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Activate API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"eval(postman.getGlobalVariable(\"testExpected\"));",
+							"eval(postman.getGlobalVariable(\"retryOnFailure\"));",
+							"finished = retryOnFailure(200, 20);",
+							"if (finished) {",
+							"    testExpected([200],tests);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/manapi/{{createdID}}/state",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"state\" : \"Active\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

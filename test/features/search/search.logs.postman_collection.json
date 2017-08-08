@@ -1,0 +1,459 @@
+{
+	"variables": [],
+	"info": {
+		"name": "search.logs",
+		"_postman_id": "304488c2-2507-bc78-8557-963a7f46e49a",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth - ClearAll - Reset APIs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Reset API status code \" + responseCode.code + \" is 200\"] = responseCode.code === 200;"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/reset",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "doubleCheck",
+						"value": "tester@infa",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "SetRate Limit Policy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Set rate limit status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"eval(postman.getGlobalVariable(\"getJWT_governor\"));\r",
+							"getJWT_governor('orgid1',1);\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/policy/ratelimit",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeFrame\" : \"5000\",\n    \"quota\" : \"2\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "API Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"API create status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setGlobalVariable(\"createdID\", jsonData.id);",
+							"postman.setGlobalVariable(\"createdURL\", jsonData.exposedApi.url);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/manapi",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"providerApi\": {\r\n    \"name\": \"test_log_{{runNumber}}\",\r\n    \"url\" : \"http://localhost:8080/apimgmt/v0.4/swagger\"\r\n  },\r\n  \"policies\": {\r\n      \"authentication\": { \r\n          \"authType\" : \"BasicIcsAuth\"\r\n      }\r\n  }\r\n}\r\n"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "API Change State",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"API activate status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/manapi/{{createdID}}/state",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"state\" : \"Active\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_without_auth_header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run without header status code \" + responseCode.code + \" is not 401\"] = responseCode.code === 401;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_with_auth_type_not_Basic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run with auth type not Basic status code \" + responseCode.code + \" is not 401\"] = responseCode.code === 401;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer xxx",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_with_wrong_password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run with wrong password status code \" + responseCode.code + \" is not 401\"] = responseCode.code === 401;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic MTExMTFAMjIyMjIuMzMzMzoxMTExMQ==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"timeFrame\" : \"10000\",\n    \"quota\" : \"3\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_too_many_times (1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run #1 status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z2FkaUB3b2xmbWFuLmNvbTpicDNsdXNlcg==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_too_many_times (2) ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run #2 status code \" + responseCode.code + \" is not 200\"] = responseCode.code === 200;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z2FkaUB3b2xmbWFuLmNvbTpicDNsdXNlcg==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "run_too_many_times (3)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Run #3 status code \" + responseCode.code + \" is not 403\"] = responseCode.code === 403;",
+							""
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"\r",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{createdURL}}",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z2FkaUB3b2xmbWFuLmNvbTpicDNsdXNlcg==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

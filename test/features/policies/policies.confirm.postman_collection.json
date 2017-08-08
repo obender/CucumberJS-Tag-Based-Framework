@@ -1,0 +1,440 @@
+{
+	"variables": [],
+	"info": {
+		"name": "policies.confirm",
+		"_postman_id": "8c95e20b-eb5e-f139-0cf3-e882a8d7bbc7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "policies.confirm",
+			"description": "",
+			"item": [
+				{
+					"name": "Create JWT Functions in Swagger",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"eval(postman.getGlobalVariable(\"getJWT_admin\"));",
+									"getJWT_admin();",
+									"tests[\"JWT Bearer Shold Exist - admin-token\"]   = \"admin-token\"     in globals;",
+									"tests[\"JWT Bearer Shold Exist - admin-header\"]  = \"admin-header\"    in globals;",
+									"tests[\"JWT Bearer Shold Exist - admin-body\"]    = \"admin-body\"      in globals;",
+									"tests[\"JWT Bearer Shold Exist - admin-iat\"]     = \"admin-iat\"       in globals;",
+									"",
+									"eval(postman.getGlobalVariable(\"getJWT_governor\"));",
+									"getJWT_governor('orgid1',1);",
+									"tests[\"JWT Bearer Shold Exist - governor-header1\"]  = \"governor-header1\"    in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-body1\"]    = \"governor-body1\"      in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-token1\"]   = \"governor-token1\"     in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-iat1\"]     = \"governor-iat1\"       in globals;",
+									"",
+									"getJWT_governor('orgid2',2);",
+									"tests[\"JWT Bearer Shold Exist - governor-header2\"]  = \"governor-header2\"    in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-body2\"]    = \"governor-body2\"      in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-token2\"]   = \"governor-token2\"     in globals;",
+									"tests[\"JWT Bearer Shold Exist - governor-iat2\"]     = \"governor-iat2\"       in globals;",
+									"",
+									"eval(postman.getGlobalVariable(\"getJWT_frontend\"));",
+									"getJWT_frontend('orgid2',2,0,1800);",
+									"tests[\"JWT Bearer Shold Exist - frontend-header2\"]  = \"frontend-header2\"    in globals;",
+									"tests[\"JWT Bearer Shold Exist - frontend-body2\"]    = \"frontend-body2\"      in globals;     ",
+									"tests[\"JWT Bearer Shold Exist - frontend-token2\"]   = \"frontend-token2\"     in globals;",
+									"tests[\"JWT Bearer Shold Exist - frontend-iat2\"]     = \"frontend-iat2\"       in globals;",
+									"tests[\"JWT Bearer Shold Exist - frontend-exp2\"]     = \"frontend-exp2\"       in globals;",
+									"",
+									"",
+									"",
+									"postman.clearEnvironmentVariable(\"variable_key\");"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"hosturl\", \"http://127.0.0.1:8080\");\r",
+									"postman.setEnvironmentVariable(\"orgid1\", \"0000s7\");\r",
+									"postman.setEnvironmentVariable(\"orgid2\", \"0000s7\");\r",
+									"postman.setEnvironmentVariable(\"buildNumber\", \"-999\");\r",
+									"\r",
+									"postman.setGlobalVariable(\"getJWT_admin\",getJWT_admin.toString());\r",
+									"postman.setGlobalVariable(\"getJWT_governor\",getJWT_governor.toString());\r",
+									"postman.setGlobalVariable(\"getJWT_frontend\",getJWT_frontend.toString());\r",
+									"\r",
+									"function getJWT_admin(dateIncrementalInSeconds) {\r",
+									"    function getJWT_Admin() {\r",
+									"        return \"gadi@wolfman.com\";\r",
+									"    }\r",
+									"\r",
+									"    function getJWT_Key() {\r",
+									"        return \"ICRT<->APIGW\";\r",
+									"    }\r",
+									"\r",
+									"    function getBase64(text) {\r",
+									"        var wordArr = CryptoJS.enc.Utf8.parse(text);\r",
+									"        return CryptoJS.enc.Base64.stringify(wordArr);\r",
+									"    }\r",
+									"\r",
+									"    var headersText = JSON.stringify({\r",
+									"        \"alg\": \"HS256\",\r",
+									"        \"typ\": \"JWT\"\r",
+									"    });\r",
+									"\r",
+									"    var dateIncInSeconds = 0;\r",
+									"    if (dateIncrementalInSeconds) {\r",
+									"        dateIncInSeconds = dateIncrementalInSeconds;\r",
+									"    }\r",
+									"    var nowDate = new Date();\r",
+									"    nowDate.setSeconds(nowDate.getSeconds() + dateIncInSeconds);\r",
+									"\r",
+									"    var iat = Math.floor(nowDate / 1000);\r",
+									"    var bodyText = JSON.stringify({\r",
+									"        \"admin\": true,\r",
+									"        \"userName\": getJWT_Admin(),\r",
+									"        \"iat\": iat\r",
+									"    });\r",
+									"    var signaurePassword = getJWT_Key();\r",
+									"    var headerTextBase64 = getBase64(headersText);\r",
+									"    var bodyTextBase64 = getBase64(bodyText);\r",
+									"    var signature = CryptoJS.HmacSHA256(headerTextBase64 + \".\" + bodyTextBase64, signaurePassword).toString(CryptoJS.enc.Base64);\r",
+									"    var jwt = headerTextBase64 + '.' + bodyTextBase64 + '.' + signature;\r",
+									"    postman.setGlobalVariable(\"admin-header\", headersText);\r",
+									"    postman.setGlobalVariable(\"admin-body\", bodyText);\r",
+									"    postman.setGlobalVariable(\"admin-token\", jwt);\r",
+									"    postman.setGlobalVariable(\"admin-iat\", iat);\r",
+									"}\r",
+									"\r",
+									"function getJWT_governor(orgID, seq, dateIncrementalInSeconds) {\r",
+									"    function getJWT_Admin() {\r",
+									"        return \"gadi@wolfman.com\";\r",
+									"    }\r",
+									"\r",
+									"    function getJWT_Key() {\r",
+									"        return \"ICRT<->APIGW\";\r",
+									"    }\r",
+									"\r",
+									"    function getBase64(text) {\r",
+									"        var wordArr = CryptoJS.enc.Utf8.parse(text);\r",
+									"        return CryptoJS.enc.Base64.stringify(wordArr);\r",
+									"    }\r",
+									"\r",
+									"    var headersText = JSON.stringify({\r",
+									"        \"alg\": \"HS256\",\r",
+									"        \"typ\": \"JWT\"\r",
+									"    });\r",
+									"\r",
+									"    var dateIncInSeconds = 0;\r",
+									"    if (dateIncrementalInSeconds) {\r",
+									"        dateIncInSeconds = dateIncrementalInSeconds;\r",
+									"    }\r",
+									"\r",
+									"    var nowDate = new Date();\r",
+									"    nowDate.setSeconds(nowDate.getSeconds() + dateIncInSeconds);\r",
+									"\r",
+									"    var iat = Math.floor(nowDate / 1000);\r",
+									"\r",
+									"    var buildNumber = postman.getEnvironmentVariable(\"buildNumber\");\r",
+									"    var orgId = postman.getEnvironmentVariable(orgID).replace('{{buildNumber}}', buildNumber);\r",
+									"    var bodyText = JSON.stringify({\r",
+									"        \"userName\": getJWT_Admin(),\r",
+									"        \"orgId\": orgId,\r",
+									"        \"iat\": iat\r",
+									"    });\r",
+									"    var signaurePassword = getJWT_Key();\r",
+									"    var headerTextBase64 = getBase64(headersText);\r",
+									"    var bodyTextBase64 = getBase64(bodyText);\r",
+									"    var signature = CryptoJS.HmacSHA256(headerTextBase64 + \".\" + bodyTextBase64, signaurePassword).toString(CryptoJS.enc.Base64);\r",
+									"    var jwt = headerTextBase64 + '.' + bodyTextBase64 + '.' + signature;\r",
+									"    postman.setGlobalVariable(\"governor-header\" + seq, headersText);\r",
+									"    postman.setGlobalVariable(\"governor-body\" + seq, bodyText);\r",
+									"    postman.setGlobalVariable(\"governor-token\" + seq, jwt);\r",
+									"    postman.setGlobalVariable(\"governor-iat\" + seq, iat);\r",
+									"}\r",
+									"\r",
+									"function getJWT_frontend(orgID, seq, _iatOffsetSeconds, _expOffsetSeconds) {\r",
+									"    function getJWT_Admin() {\r",
+									"        return \"gadi@wolfman.com\";\r",
+									"    }\r",
+									"\r",
+									"    function getJWT_Key() {\r",
+									"        return \"BACKEND<->FRONTEND\";\r",
+									"    }\r",
+									"\r",
+									"    function getBase64(text) {\r",
+									"        var wordArr = CryptoJS.enc.Utf8.parse(text);\r",
+									"        return CryptoJS.enc.Base64.stringify(wordArr);\r",
+									"    }\r",
+									"\r",
+									"    var headersText = JSON.stringify({\r",
+									"        \"alg\": \"HS256\",\r",
+									"        \"typ\": \"JWT\"\r",
+									"    });\r",
+									"\r",
+									"    var iatOffsetSeconds = 0;\r",
+									"    if (_iatOffsetSeconds) {\r",
+									"        iatOffsetSeconds = _iatOffsetSeconds;\r",
+									"    }\r",
+									"\r",
+									"    var expOffsetSeconds = 0;\r",
+									"    if (_expOffsetSeconds) {\r",
+									"        expOffsetSeconds = _expOffsetSeconds;\r",
+									"    }\r",
+									"\r",
+									"    var nowDate = new Date();\r",
+									"    nowDate.setSeconds(nowDate.getSeconds() + iatOffsetSeconds);\r",
+									"    var expDate = new Date();\r",
+									"    expDate.setSeconds(expDate.getSeconds() + expOffsetSeconds);\r",
+									"\r",
+									"    var iat = Math.floor(nowDate / 1000);\r",
+									"    var exp = Math.floor(expDate / 1000);\r",
+									"\r",
+									"    var buildNumber = postman.getEnvironmentVariable(\"buildNumber\");\r",
+									"    var orgId = postman.getEnvironmentVariable(orgID).replace('{{buildNumber}}', buildNumber);\r",
+									"    var bodyText = JSON.stringify({\r",
+									"        \"sub\": getJWT_Admin(),\r",
+									"        \"iss\": orgId,\r",
+									"        \"iat\": iat,\r",
+									"        \"orgName\" : \"Informatica?\",\r",
+									"        \"exp\": exp,\r",
+									"        \"jti\": \"af2a7e48-0edd-47a9-bded-2e8115fe4720\"\r",
+									"    });\r",
+									"    var signaurePassword = getJWT_Key();\r",
+									"    var headerTextBase64 = getBase64(headersText);\r",
+									"    var bodyTextBase64 = getBase64(bodyText);\r",
+									"    var signature = CryptoJS.HmacSHA256(headerTextBase64 + \".\" + bodyTextBase64, signaurePassword).toString(CryptoJS.enc.Base64);\r",
+									"    var jwt = headerTextBase64 + '.' + bodyTextBase64 + '.' + signature;\r",
+									"    postman.setGlobalVariable(\"frontend-header\" + seq, headersText);\r",
+									"    postman.setGlobalVariable(\"frontend-body\" + seq, bodyText);\r",
+									"    postman.setGlobalVariable(\"frontend-token\" + seq, jwt);\r",
+									"    postman.setGlobalVariable(\"frontend-iat\" + seq, iat);\r",
+									"    postman.setGlobalVariable(\"frontend-exp\" + seq, exp);\r",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hosturl}}/apimgmt/v0.4/swagger",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin-token}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "expectedTests in Swagger ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"eval(postman.getGlobalVariable(\"testExpected\"));",
+									"testExpected([400],tests);",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"function testExpected(params, tests) {",
+									"  console.group = console.group || function(groupName) {",
+									"    console.log('------------------------ '+groupName +' ------------------------');",
+									"  }",
+									"  console.groupEnd = console.groupEnd || function() {",
+									"    console.log('\\n');",
+									"  }",
+									"  ",
+									"  function logError() {",
+									"    console.group(\"Request\");",
+									"    console.log('Request.headers:',",
+									"      JSON.parse(JSON.stringify(request.headers)));",
+									"    console.log('Request.data:',",
+									"      JSON.parse(JSON.stringify(request.data)));",
+									"    console.groupEnd();",
+									"    console.group(\"Response\")",
+									"    console.log('Response.headers:',",
+									"      JSON.parse(JSON.stringify(responseHeaders)));",
+									"    console.log('Response.body:',",
+									"      JSON.parse(JSON.stringify(responseBody)));",
+									"    console.groupEnd();",
+									"  }",
+									"",
+									"  var testName, testResult, body = responseBody || '{}';",
+									"  testName = \"Status should be \" + params[0] + \", got: \" + responseCode.code + \" \" + responseCode.name + \" (\" + JSON.parse(body)['message'] + \")\";",
+									"",
+									"  testResult = (responseCode.code == params[0] || responseCode.code == params[1]);",
+									"  tests[testName] = testResult;",
+									"  if (!testResult) {",
+									"    var failedName = testName + \" Is Failed!, Details:\";",
+									"    console.group(failedName);",
+									"    logError();",
+									"    console.groupEnd();",
+									"  };",
+									"}",
+									"postman.setGlobalVariable(\"testExpected\", testExpected.toString());"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin-token}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Org 0000s7",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"eval(postman.getGlobalVariable(\"testExpected\"));",
+									"testExpected([200,409],tests);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{admin-token}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orgContact\": {\r\n    \"firstName\": \"ofer\",\r\n    \"lastName\": \"lahav\",\r\n    \"email\": \"olahav@informatica.com\"\r\n  }\r\n}\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Set IP filtering policies",
+					"request": {
+						"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/policy/ipfilter",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{governor-token1}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n      \"fromIp\": \"5.6.7.8\",\n      \"toIp\": \"5.6.7.9\",\n      \"access\": \"Allow\",\n      \"description\": \"\"\n    },\n    {\n      \"fromIp\": \"1.2.3.4\",\n      \"toIp\": \"1.2.3.8\",\n      \"access\": \"Allow\",\n      \"description\": \"\"\n    },\n    {\n      \"fromIp\": null,\n      \"toIp\": null,\n      \"access\": \"Allow\",\n      \"description\": null\n    }\n]"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Set Rate Limit Policy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"\r",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/policy/ratelimit",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{governor-token1}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"timeFrame\" : \"60000\",\n    \"quota\" : \"1000\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

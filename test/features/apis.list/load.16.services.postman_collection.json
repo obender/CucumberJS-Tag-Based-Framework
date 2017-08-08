@@ -1,0 +1,136 @@
+{
+	"variables": [],
+	"info": {
+		"name": "load.16.services",
+		"_postman_id": "988135df-94ec-8b30-72f6-9dd2ab92b61e",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Reset API's 0000s7",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setEnvironmentVariable(\"orgid1\", \"0000s7\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{hosturl}}/apimgmt/v0.4/org/{{orgid1}}/reset",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "doubleCheck",
+						"value": "tester@infa",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{governor-token1}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "sample2_load org",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/ics/api/v2/org/{{orgid1}}",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "loads the organization\n\nresult, for example:\n\n{\n  \"orgId\": \"0000s7\",\n  \"name\": \"Informatica7\"\n}"
+			},
+			"response": []
+		},
+		{
+			"name": "sample2_reload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/reload",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "sample2_load 16 services",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setGlobalVariable(\"servicesTimesFour\", \"4\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/services/load/{{servicesTimesFour}}",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "make sure you change the parameter {{servicesTimesFour}} in the pre-request\n\nnumber of services that will be created = {{servicesTimesFour}}*4\n\n"
+			},
+			"response": []
+		}
+	]
+}

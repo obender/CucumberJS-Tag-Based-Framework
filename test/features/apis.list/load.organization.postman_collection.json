@@ -1,0 +1,67 @@
+{
+	"variables": [],
+	"info": {
+		"name": "load.organization",
+		"_postman_id": "d2b967ad-6fac-045d-903d-20c3fa3c31ff",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "sample2_load org",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"postman.setEnvironmentVariable(\"orgid1\", \"0000s7\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/ics/api/v2/org/{{orgid1}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "loads the organization\n\nresult, for example:\n\n{\n  \"orgId\": \"0000s7\",\n  \"name\": \"Informatica7\"\n}"
+			},
+			"response": []
+		},
+		{
+			"name": "sample2_reload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code should be  200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8580/sample2/api/company/reload",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
