@@ -15,7 +15,7 @@ Feature: Activity Logs Day or Range
         And  I select date "07/05/2017" in Tag "Activity To Date infaCalendar"
         And I click Tag "Show Activity Log"
         Then the grid "activity_logs" has any rows
-        And the value of Tag "~grid:cell|1;;Invocation Time" is "7/5/2017 11:58:54 PM"
+        And the value of Tag "~grid:cell|1;;Timestamp" is "7/5/2017 11:58:54 PM"
 
     Scenario: 2) 1 day of logs (no logs in it), From date to 06/01/2017 and To date to 06/01/2017
         When I select date "05/01/2017" in Tag "Activity From Date infaCalendar"
@@ -34,7 +34,7 @@ Feature: Activity Logs Day or Range
         And  I select date "07/07/2017" in Tag "Activity To Date infaCalendar"
         And I click Tag "Show Activity Log"
         Then the grid "activity_logs" has any rows
-        And the value of Tag "~grid:cell|1;;Invocation Time" is "7/7/2017 11:58:54 PM"
+        And the value of Tag "~grid:cell|1;;Timestamp" is "7/7/2017 11:58:54 PM"
 
 
 

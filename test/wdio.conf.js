@@ -187,8 +187,7 @@ exports.config = {
                 browser.waitForExist(selector, ms, reverse) &&
                 browser.waitForEnabled(selector, ms, reverse);
             } catch (e) {
-                console.log(`Selector not found: '${selector}' \n${e}\n\n`);
-                return false;
+                throw new Error(`Selector not found: '${selector} \nException:${e}`);
             }
             return true;
         });
@@ -197,7 +196,7 @@ exports.config = {
             try {
                 browser.waitForExist('.blockUI', browser.options.waitforTimeout, true);
             } catch (e) {
-                console.log(`Error: waitForNoOverlay failed \n Error:${e}`);
+                throw new Error(`waitForNoOverlay failed \nException:${e}`);
             }
         });
 
@@ -205,7 +204,7 @@ exports.config = {
             try {
                 browser.waitUntil(waitFunction, ms);
             } catch (e) {
-                console.log(`Error: waitSafely failed on: ${waitFunction.toString()} \n Error:${e}`)
+                throw new Error(`Error: waitSafely failed on: ${waitFunction.toString()} \nException:${e}`);
             }
         });
 
@@ -256,5 +255,21 @@ exports.config = {
     //
     // Gets executed after all workers got shut down and the process is about to exit. It is not
     // onComplete: function (exitCode) {
+    // }
+
+    // Cucumber specific hooks
+    beforeFeature: function (feature) {
+        let scenarioRestriction = require('./steps.defenitions/tags/scenarioRestriction');
+        scenarioRestriction(null);
+    },
+    // beforeScenario: function (scenario) {
+    // },
+    // beforeStep: function (step) {
+    // },
+    // afterStep: function (stepResult) {
+    // },
+    // afterScenario: function (scenario) {
+    // },
+    // afterFeature: function (feature) {
     // }
 };

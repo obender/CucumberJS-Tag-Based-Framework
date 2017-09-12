@@ -1,7 +1,7 @@
 const argv = require('yargs')
     .default('folder', '**')
     .default('file', '*')
-    .default('port', '3000')
+    .default('port', '8080')
     .default('timeout_d', '50000')
     .default('tag', '')
     .argv;
@@ -49,8 +49,7 @@ gulp.task('build-dev', sequence('clean', 'install',
     ['copy', 'css', 'img', 'locale', 'lib', 'help', 'rest', 'vendor'],
     'inject-dev'));
 gulp.task('build-mock', sequence('clean', 'install',
-    ['copy', 'css', 'img', 'locale', 'lib', 'help', 'rest', 'vendor'],
-    'inject-mock'));
+    ['copy', 'css', 'img', 'locale', 'lib', 'help', 'rest', 'vendor']));
 gulp.task('install', getTask('install', config));
 gulp.task('clean', getTask('clean', {
     dest: path.join(config.dest, '/**/*')

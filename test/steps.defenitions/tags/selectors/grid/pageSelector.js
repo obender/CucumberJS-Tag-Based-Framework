@@ -12,23 +12,23 @@
  *                                      rows-in-page => the number of rows in the current page
  *                                                          out of the total (example: 10 of 78)
  */
-module.exports = (action, parentSelector) => {
+module.exports = (action) => {
 
     switch (action) {
         case 'current':
-            return ((parentSelector || "") + " .page-selection input");
+            return (".page-selection input");
         case 'next':
-            return ((parentSelector || "") + " .infaPager .arrow-right.page-arrow");
+            return (".infaPager .arrow-right.page-arrow");
         case 'prev':
-            return ((parentSelector || "") + " .infaPager .arrow-left.page-arrow");
+            return (".infaPager .arrow-left.page-arrow");
         case 'size':
-            return((parentSelector || "") + " .page-size select");
+            return(".page-size select");
         case 'current-size':
-            return((parentSelector || "") + " .page-size option:checked");
+            return(".page-size option:checked");
         case 'total-rows':
-            return((parentSelector || "") + " .total-rows");
+            return(".total-rows");
         case 'rows-in-page':
-            return((parentSelector || "") + " .cur-page");
+            return(".cur-page");
         default:
             throw `No paging action: ${action} was found`;
     }

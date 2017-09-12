@@ -16,15 +16,15 @@ Feature: Activity Logs Sort By Header
         And  I select date "06/02/2017" in Tag "Activity To Date infaCalendar"
         And I click Tag "Show Activity Log"
         And the grid "activity_logs" has any rows
-        And the value of Tag "~grid:cell|1;;Invocation Time" contains "6/2/2017"
-        Then Tag "~grid:validateColumns|API Name;API URL;Type;Resource Path;Method;HTTP Response;Consumer IP;Username;Latency;Invocation Time|#activityLog" is displayed
+        And the value of Tag "~grid:cell|1;;Timestamp" contains "6/2/2017"
+        Then Tag "~grid:validateColumns|API Name;API URL;Type;Method;HTTP Response;Username;Consumer IP;Duration;Timestamp|#activityLog" is displayed
 
-    Scenario: 2) Clicking on the "Invocation Time" column will sort Ascending and clicking on it again will sort Descending
-        When I click Tag "~grid:header|Invocation Time"
-        And the value of Tag "~grid:cell|1;;Invocation Time" contains "6/1/2017"
-        And the value of Tag "~grid:cell|1;;Invocation Time" contains "3:00:00 AM"
-        When I click Tag "~grid:header|Invocation Time"
-        Then the utc time in Tag "~grid:cell|1;;Invocation Time" is "6/1/2017 23:58:53 PM"
+    Scenario: 2) Clicking on the "Timestamp" column will sort Ascending and clicking on it again will sort Descending
+        When I click Tag "~grid:header|Timestamp"
+        And the value of Tag "~grid:cell|1;;Timestamp" contains "6/1/2017"
+        And the value of Tag "~grid:cell|1;;Timestamp" contains "3:00:00 AM"
+        When I click Tag "~grid:header|Timestamp"
+        Then the utc time in Tag "~grid:cell|1;;Timestamp" is "6/1/2017 23:58:53 PM"
 
     Scenario: 3) Clicking on the "API URL" column will sort Ascending and clicking on it again will sort Descending
         When I click Tag "~grid:header|API URL"
@@ -56,26 +56,20 @@ Feature: Activity Logs Sort By Header
         When I click Tag "~grid:header|API Name"
         Then the value of Tag "~grid:cell|1;;API Name" is "Employee6A"
 
-    Scenario: 8) Clicking on the "Resource Path" column will sort Ascending and clicking on it again will sort Descending
-        When I click Tag "~grid:header|Resource Path"
-        And the value of Tag "~grid:cell|1;;Resource Path" is "id=0"
-        When I click Tag "~grid:header|Resource Path"
-        Then the value of Tag "~grid:cell|1;;Resource Path" is "swagger"
-
-    Scenario: 9) Clicking on the "Method" column will sort Ascending and clicking on it again will sort Descending
+    Scenario: 8) Clicking on the "Method" column will sort Ascending and clicking on it again will sort Descending
         When I click Tag "~grid:header|Method"
         And the value of Tag "~grid:cell|1;;Method" is "GET"
         When I click Tag "~grid:header|Method"
         Then the value of Tag "~grid:cell|1;;Method" is "POST"
 
-    Scenario: 10) Clicking on the "Type" column will sort Ascending and clicking on it again will sort Descending
+    Scenario: 9) Clicking on the "Type" column will sort Ascending and clicking on it again will sort Descending
         When I click Tag "~grid:header|Type"
         And the value of Tag "~grid:cell|1;;Type" is "REST"
         When I click Tag "~grid:header|Type"
         Then the value of Tag "~grid:cell|1;;Type" is "REST"
 
-    Scenario: 11) Clicking on the "Latency" column will sort Ascending and clicking on it again will sort Descending
-        When I click Tag "~grid:header|Latency"
-        And the value of Tag "~grid:cell|1;;Latency" is "111"
-        When I click Tag "~grid:header|Latency"
-        Then the value of Tag "~grid:cell|1;;Latency" is "6662"
+    Scenario: 10) Clicking on the "Duration" column will sort Ascending and clicking on it again will sort Descending
+        When I click Tag "~grid:header|Duration"
+        And the value of Tag "~grid:cell|1;;Duration" is "111"
+        When I click Tag "~grid:header|Duration"
+        Then the value of Tag "~grid:cell|1;;Duration" is "6662"

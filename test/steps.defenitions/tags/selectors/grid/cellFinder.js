@@ -6,7 +6,7 @@ supported formats:
    ~grid|cell:*;;<col#>
    ~grid|cell:<N>;;<col#>;<column>;<value>
 */
-module.exports = (param, parentSelector) => {
+module.exports = (param) => {
 
     let params = param.replace("=", ";").split(";");
     if (params.length != 3 && params.length != 5) {
@@ -19,7 +19,7 @@ module.exports = (param, parentSelector) => {
     //
     let colIdx = params[2];
     if (!colIdx.match(/\d+/g)) {
-        var columnTitles = browser.getText((parentSelector || "") + " .infaTableGrid-column-header-content");
+        var columnTitles = browser.getText(".infaTableGrid-column-header-content");
         colIdx = columnTitles.indexOf(colIdx) + 1;
         if (colIdx < 1) {
             let err = "requested column '" + params[2] + "' is not part of the grid";
@@ -37,7 +37,7 @@ module.exports = (param, parentSelector) => {
         rowParams.push(params[4]);
     }
 
-    let rowSelector = rowFinder(rowParams.join(";"), parentSelector);
+    let rowSelector = rowFinder(rowParams.join(";"));
 
     //
     //   for '*' selector, return an array of results

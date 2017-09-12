@@ -20,17 +20,4 @@ describe('Rule: browser.addCommand', () => {
         }
     });
 
-    it('waitSafely failed wait', () => {
-        try {
-            browser.waitSafely(function () {
-                return false;
-            }, 7, browser.options.waitforInterval);
-            assert.ok(true);
-        }
-        catch (e) {
-            assert.fail("waitSafely Shold not throw an Exception");
-        }
-    });
-
-
 });

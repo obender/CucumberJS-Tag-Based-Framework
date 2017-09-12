@@ -32,7 +32,7 @@ module.exports = (focusTag, clickTag, clickText) => {
                 }, clickText.trim())
         } else {
             error = `Error can't click on TAG -> ${clickTag} -> ${clickSelector}`;
-            browser.waitForNoOverlay();
+            browser.waitTillReady(clickSelector);
             browser
                 .moveToObject(focusSelector)
                 .click(clickSelector);

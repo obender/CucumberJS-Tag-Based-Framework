@@ -19,8 +19,7 @@ exports.config = merge(wdioConf.config, {
         }
     ],
     //services: ['selenium-standalone'], // Will open the browser and show UI
-    //services: ['phantomjs'], // Won't open the browser and show UI
-    services: ['phantomjs'],
+    services: ['phantomjs'], // Won't open the browser and show UI
     framework: 'mocha',
     mochaOpts: {
         ui: 'bdd',

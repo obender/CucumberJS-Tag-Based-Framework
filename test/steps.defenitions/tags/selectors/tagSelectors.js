@@ -23,15 +23,15 @@ import ipv4Selector from './ipv4/ipv4Selector';
 import {getRunNumber} from '../../postman/executePostmanCollection';
 import errorSelector from './errorSelector';
 
-module.exports = (raw_tag_params, section, element, param, parentSelector) => {
+module.exports = (raw_tag_params, section, element, param) => {
 
     /* search tag by tag name */
     if (!section) {
-        return `[data-bo=${raw_tag_params}]`;
+        return `[data-bo="${raw_tag_params}"]`;
     }
 
     if (section == "~grid") {
-        return typicalSelectors(element, param, parentSelector);
+        return typicalSelectors(element, param);
     }
 
     if (section == "~postman") {

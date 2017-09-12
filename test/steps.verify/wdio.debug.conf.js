@@ -9,19 +9,15 @@ exports.config = merge(wdioConf.config, {
         './test/steps.verify/when/*.js',
         './test/steps.verify/then/*.js',
         './test/steps.verify/utils/*.js',
-        // './test/steps.verify/when/I focus on Tag and I Click Tag.js'
     ],
     logLevel: 'error', // Level of logging: silent | verbose | command | data | result | error
     capabilities: [
         {
-            browserName: 'phantomjs'
-        },
-        // {
-        //     browserName: 'chrome',
-        //     "chromeOptions": {
-        //         args: ['--disable-web-security']
-        //     }
-        // }
+            browserName: 'chrome',
+            "chromeOptions": {
+                args: ['--disable-web-security']
+            }
+        }
     ],
     //services: ['selenium-standalone'], // Will open the browser and show UI
     services: ['phantomjs'], // Won't open the browser and show UI

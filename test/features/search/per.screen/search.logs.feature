@@ -20,24 +20,24 @@ Feature: Search the Security logs
         When I set Tag "~grid:search||#securityLog" to "403"
         And I press the "Enter" key
         Then the grid "logs" has 4 rows
-        And Tag "~grid:row|*;Endpoint=/t/0000s7.com/thomas3/1.0.0|#securityLog" has 0 row
+        And Tag "~grid:row|*;API URL=/t/0000s7.com/thomas3/1.0.0|#securityLog" has 0 row
 
     Scenario: Search logs for "000yvl" expecting 12 events, all of them containing the same endpoint. to find it out I look at the first and last row (last row: sorting by endpoint reversed)
         Then the grid "logs" has any rows
         When I set Tag "~grid:search||#securityLog" to "000yvl"
         And I press the "Enter" key
         Then the grid "logs" has 12 rows
-        And the value of Tag "~grid:cell|1;;Endpoint|#securityLog" is "/t/000yvl.com/000YVL/employee/1.0.0"
-        When I click Tag "~grid:header|Timestamp|#securityLog"
+        And the value of Tag "~grid:cell|1;;API URL|#securityLog" is "/t/000yvl.com/000YVL/employee/1.0.0"
+        When I click Tag "~grid:header|1|#securityLog"
         Then the grid "logs" has 12 rows
-        And the value of Tag "~grid:cell|1;;Endpoint|#securityLog" is "/t/000yvl.com/000YVL/employee/1.0.0"
+        And the value of Tag "~grid:cell|1;;API URL|#securityLog" is "/t/000yvl.com/000YVL/employee/1.0.0"
 
     Scenario: Search logs for "@" expecting 4 events
         Then the grid "logs" has any rows
         When I set Tag "~grid:search||#securityLog" to "@"
         And I press the "Enter" key
         Then the grid "logs" has 4 rows
-        And Tag "~grid:row|*;Endpoint=/t/000yvl.com/000YVL/employee/1.0.0|#securityLog" has 4 row
+        And Tag "~grid:row|*;API URL=/t/000yvl.com/000YVL/employee/1.0.0|#securityLog" has 4 row
 
     Scenario: Search logs for "zzz" expecting no records
         When I set Tag "~grid:search||#securityLog" to "zzz"

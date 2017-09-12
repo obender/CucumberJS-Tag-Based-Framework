@@ -8,12 +8,14 @@
  *                          param           = "Timestamp"
  */
 
+import scenarioRestriction from '../scenarioRestriction';
 import tagSelectors from './tagSelectors';
 
 module.exports = (raw_tag_params) => {
     const CUSTOM_TAG_START_CHAR = '~';
     const CUSTOM_TAG_SECTION_CHAR = ':';
     const CUSTOM_TAG_PARAM_CHAR = '|';
+    let result = '';
     if (raw_tag_params.startsWith(CUSTOM_TAG_START_CHAR)) {
         let splitSection = raw_tag_params.split(CUSTOM_TAG_SECTION_CHAR);
         let section = splitSection[0];
@@ -22,7 +24,15 @@ module.exports = (raw_tag_params) => {
         let param = splitParam[1];
         let ps = splitParam[2];
 
-        return tagSelectors(raw_tag_params, section, element, param, ps);
+        result = tagSelectors(raw_tag_params, section, element, param, ps);
     } else
-        return tagSelectors(`"${raw_tag_params}"`);
+        result = tagSelectors(`${raw_tag_params}`);
+
+    let scenario = scenarioRestriction();
+
+    if (scenario)
+        result = `${scenario} ${result}`;
+
+		
+    return result;
 };

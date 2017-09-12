@@ -33,6 +33,6 @@ Feature: Organization name
     Scenario: 3) "Security Logs" page - user info (example: find if exist "Organization: Informatica7 (0000s7)")
         When I click Tag "Analytics"
         And I click Tag "Security Log"
-        Then Tag "~grid:validateColumns|Timestamp;Endpoint;HTTP Response;Description;Username;IP Address" is displayed
+        Then Tag "~grid:validateColumns|Timestamp;API URL;HTTP Response;Description;Username;Consumer IP" is displayed
         When Tag "Organization" is displayed
         Then the text in Tag "Organization" is "Organization: Informatica7 (0000s7)"

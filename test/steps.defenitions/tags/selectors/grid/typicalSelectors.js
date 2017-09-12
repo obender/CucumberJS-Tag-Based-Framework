@@ -20,7 +20,7 @@ import menuFinder from "./menuFinder"
 import pageSelector from "./pageSelector"
 
 
-module.exports = (element, param, parentSelector) => {
+module.exports = (element, param) => {
     let selector = "";
 
     switch (element) {
@@ -32,24 +32,21 @@ module.exports = (element, param, parentSelector) => {
         case 'menuText':
             return '.menuContainer';
         case 'cell':                            // "~grid:cell|"
-            return cellFinder(param, parentSelector);
+            return cellFinder(param);
         case 'row':                             // "~grid:row|"
-            return rowFinder(param, parentSelector);
+            return rowFinder(param);
         case 'header':                          // "~grid:header|Name"
-            selector = (parentSelector && !isNaN(+param))
-                ? `${parentSelector} .jqx-widget-header:nth-child(${param}) .infaTableGrid-column-header-content`
-                : `.infaTableGrid-column-header-content=${param}`;
+            selector = `.infaTableGrid-column-header-content=${param}`;
             return selector;
         case 'sortMenu':                        // "~grid:sortMenu"
             selector = "div.infaTableHeader > div > div.infaTableButtonSet > div:nth-child(2) > div.infaDropdown_button > button";
             return selector;
         case 'page':                            // "~grid:page|next"
-            return pageSelector(param, parentSelector);
+            return pageSelector(param);
         case 'gridHeader':
             return clickGridheader();
         case 'search':
-            selector = (parentSelector || "")
-                + " div.infaTableHeader div.infaTableButtonSet > div.infaTableBtn.infaTextBox.hasClearBtn > input";
+            selector = "div.infaTableHeader div.infaTableButtonSet > div.infaTableBtn.infaTextBox.hasClearBtn > input";
             return selector;
         case 'rowsCounter':
             selector = ".infaTable-title-count";

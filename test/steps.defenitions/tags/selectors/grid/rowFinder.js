@@ -6,7 +6,7 @@
 //      ~grid|row:2;Access Type;Deny   => the 2nd row which contains "Deny" in column "Access Type"
 //
 
-module.exports = (param, parentSelector) => {
+module.exports = (param) => {
     let params = param.replace("=", ";").split(";");
     if (params.length == 0 || params.length > 3) {
         let err = 'Invalid selector format "' + param + '", requires 1 or 3 parameters (2 allowed, but 2nd is ignored)';
@@ -15,7 +15,7 @@ module.exports = (param, parentSelector) => {
     }
 
     //   get the ids of all the rows in the grid
-    let selector = (parentSelector || '') + ' [role="row"]';
+    let selector = '[role="row"]';
     browser.waitTillReady(selector);
     let ids = browser.getAttribute(selector, "id");
     let hasCondition = params.length > 2;
@@ -34,7 +34,7 @@ module.exports = (param, parentSelector) => {
     //
     //   if there is a condition, need to look for rows which match the desired value
     //
-    let columnTitles = browser.getText((parentSelector || "") + " .infaTableGrid-column-header-content");
+    let columnTitles = browser.getText(".infaTableGrid-column-header-content");
     let columnIdx = -1;
     let expectedColumnVal = '';
     if (hasCondition) {
